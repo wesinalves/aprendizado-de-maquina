@@ -1,0 +1,73 @@
+'''
+Regressão ridge usando Python
+
+considerando y_i = m*x_i + b,
+
+onde m é o coeficiente angular,
+e b é o coeficiente angular
+
+Y = vetor com n elementos y_n
+X = vetor com n elementos x_n
+
+m = (X.T * X + alpha * I)^-1 * X.T * y
+
+b = (sum(Y) - m*sum(X)) / n
+
+'''
+
+from sklearn.metrics import mean_squared_error as rmse
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+import numpy as np
+
+def regressao_ridge(X, y, alpha):
+    '''Implementa método regressão ridge.'''
+
+    # encontrar o coeficiente beta
+    A = alpha * np.eye(X.shape[1])
+    pseudo_inverse = np.linalg.inv(X.T @ X + A) @ X.T
+    beta = pseudo_inverse @ y 
+    
+    return beta
+
+def gerar_dados():
+    '''Gerar matriz X e vetor y.'''
+    rng = np.random.default_rng()
+    X = 5 * rng.random((100, 3))
+    beta = 2 * rng.random((3, 1))
+    y = np.dot(X, beta) + 0.7
+
+    return X, y
+
+def main():
+    '''Executa função principal.'''
+
+    X, y = gerar_dados()
+    alpha = 1
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.33, random_state=42
+    )
+
+    # estimar valores de Y
+    b = regressao_ridge(X_train, y_train, alpha)
+    y_pred = np.dot(X_test, b)  
+
+    # avaliar modelo
+    erro = rmse(y_test, y_pred)
+    print(erro)    
+
+    # plotar gráficos
+    fig, axis = plt.subplots(X.shape[1])
+    fig.suptitle('Regressão ridge em python')
+    for i, axs in enumerate(axis):
+        axs.scatter(X_test[:,i], y_test, label='Valor real')
+        axs.scatter(X_test[:,i], y_pred, label='Valor estimado')
+        axs.set(ylabel=f'Dimensão {i}')
+    
+    plt.legend()
+    plt.xlabel('Valores de X')    
+    plt.show()    
+
+main()
+
+
