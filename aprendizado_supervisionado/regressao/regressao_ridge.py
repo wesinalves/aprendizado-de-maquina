@@ -1,18 +1,12 @@
 '''
 Regressão ridge usando Python
 
-considerando y_i = m*x_i + b,
+considerando y = X * beta,
 
-onde m é o coeficiente angular,
-e b é o coeficiente angular
+Y = vetor com n elementos
+X = matriz com n,m elementos
 
-Y = vetor com n elementos y_n
-X = vetor com n elementos x_n
-
-m = (X.T * X + alpha * I)^-1 * X.T * y
-
-b = (sum(Y) - m*sum(X)) / n
-
+beta = (X.T * X + alpha * I)^-1 * X.T * y
 '''
 
 from sklearn.metrics import mean_squared_error as rmse
@@ -21,9 +15,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def regressao_ridge(X, y, alpha):
-    '''Implementa método regressão ridge.'''
+    '''Implementa regressão ridge.'''
 
-    # encontrar o coeficiente beta
+    # encontrar o vetor beta
     A = alpha * np.eye(X.shape[1])
     pseudo_inverse = np.linalg.inv(X.T @ X + A) @ X.T
     beta = pseudo_inverse @ y 
