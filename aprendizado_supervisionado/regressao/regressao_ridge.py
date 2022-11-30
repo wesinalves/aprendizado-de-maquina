@@ -9,6 +9,7 @@ beta: vetor de n coeficientes
 
 beta = (X.T * X + alpha * I)^-1 * X.T * y
 '''
+
 from sklearn.metrics import mean_squared_error as rmse
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
@@ -47,13 +48,13 @@ def main():
     b = regressao_ridge(X_train, y_train, alpha)
     y_pred = np.dot(X_test, b)
 
-    # avaliar modelo
+    # avaliar o modelo
     erro = rmse(y_test, y_pred)
     print(erro)
 
     # plotar gráficos
     fig, axis = plt.subplots(X.shape[1])
-    fig.suptitle('Regressão ridge em python')
+    fig.suptitle('Regressão ridge em Python')
     for i,axs in enumerate(axis):
         axs.scatter(X_test[:,i], y_test, label='Valor real')
         axs.scatter(X_test[:,i], y_pred, label='Valor estimado')
@@ -64,7 +65,6 @@ def main():
     plt.show()
 
 main()
-
 
 
 
