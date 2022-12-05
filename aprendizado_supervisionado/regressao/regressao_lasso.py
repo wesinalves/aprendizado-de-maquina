@@ -1,5 +1,5 @@
 '''
-Regressão ridge usando Python
+Regressão lasso usando Python
 
 considerando y = X * beta,
 
@@ -7,7 +7,16 @@ y: vetor com n elementos
 X: matriz com n,m elementos
 beta: vetor de n coeficientes
 
-beta = (X.T * X + alpha * I)^-1 * X.T * y
+Forma matricial para calcular o coeficiente beta considerando a 
+penalização lasso. 
+
+Considerando termo de penalização l1 = alpha * sum(abs(beta))
+Como derivada do termo de penalização em relação 
+ao coeficiente é alpha * sign(beta),
+onde n é o número de elementos em beta
+
+
+beta = (X.T @ X)^-1 @ X.T @ y - alpha * sign(beta)
 '''
 
 from sklearn.metrics import mean_squared_error as rmse
@@ -15,15 +24,15 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import numpy as np
 
-def regressao_ridge(X, y, alpha):
+def regressao_lasso(X, y, alpha):
     '''Implementa a regressão ridge.'''
 
-    # encontrar o vetor beta
-    A = alpha * np.eye(X.shape[1])
-    pseudo_inverse = np.linalg.inv(X.T @ X + A) @ X.T
-    beta = pseudo_inverse @ y
+    # encontrar o vetor beta    
+    pseudo_inverse = np.linalg.inv(X.T @ X) @ X.T
+    beta = (pseudo_inverse @ y)
+    beta_lasso = beta - alpha * np.sign(beta)
 
-    return beta
+    return beta_lasso
 
 def gerar_dados():
     '''Gerar matriz X e vetor y.'''
@@ -40,13 +49,13 @@ def main():
     '''Executa a função principal.'''
 
     X, y = gerar_dados()
-    alpha = 1.6
+    alpha = 0.2
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.33, random_state=42
     )
 
     # estimar valores de y
-    b = regressao_ridge(X_train, y_train, alpha)
+    b = regressao_lasso(X_train, y_train, alpha)
     y_pred = np.dot(X_test, b)
 
     # avaliar o modelo
@@ -55,7 +64,7 @@ def main():
 
     # plotar gráficos
     fig, axis = plt.subplots(X.shape[1])
-    fig.suptitle('Regressão ridge em Python')
+    fig.suptitle('Regressão lasso em Python')
     for i,axs in enumerate(axis):
         axs.scatter(X_test[:,i], y_test, label='Valor real')
         axs.scatter(X_test[:,i], y_pred, label='Valor estimado')
