@@ -85,7 +85,7 @@ if __name__ == '__main__':
     X, y = load_iris(return_X_y=True)
     # inicializa variáveis
     X_train, X_test, y_train, y_test = train_test_split(X, y,
-        stratify=y, test_size=0.7, random_state=42)
+        stratify=y, test_size=0.3, random_state=42)
     # seleciona valor do parâmetro K
     K = 9
 
