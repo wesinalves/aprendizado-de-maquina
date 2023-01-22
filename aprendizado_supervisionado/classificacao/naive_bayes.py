@@ -58,8 +58,8 @@ def train(X, y):
 def gerar_grafico():
     '''Gera gráfico do resultado.'''        
     
-    ax.set_xlim(0, 5)
-    ax.set_ylim(0, 5)    
+    ax.set_xlim(0, 6)
+    ax.set_ylim(0, 6)    
     ani = FuncAnimation(fig, update_plot, 
          frames=range(len(y_pred)), interval=50)
 
@@ -79,7 +79,7 @@ if __name__ == '__main__':
     
     # inicializa variáveis
     X_train, X_test, y_train, y_test = train_test_split(X, y,
-        stratify=y, test_size=0.26, random_state=42)
+        test_size=0.28, random_state=42)
     
     
     # calcular a probabilidade a priori da classe P(y_i)
