@@ -1,7 +1,7 @@
 '''
-Algoritmo 1R usando Python
+Algoritmo OneRule usando Python
 
-escolhe a regra com a menor taxa de erros.
+escolhe as regras pelo atributo com a menor taxa de erros.
 
 by Wesin Alves.
 '''
@@ -15,7 +15,7 @@ from matplotlib.animation import FuncAnimation
 import pandas as pd
 
 def load_balance():
-    '''Carrega dados para treinar o modelo.'''
+    '''Load balance dataset.'''
     attributes = ['Left-Weight', 'Left-Distance', 'Right-Weight', 'Right-Distance']
     columns = ['Class']
     columns.extend(attributes)
@@ -25,41 +25,37 @@ def load_balance():
     return data_X, data_y
 
 def train(X, y):
-    '''Contabiliza as os erros de cada atributo por classe'''
+    '''Train One Rule model.'''
     train_data = X.copy()
     train_data['Class'] = y
 
     error_rate = {}
     rules = {}
-    for attribute in X.columns:        
+    for attribute in X:
         error_rules = 0
         for v in train_data[attribute].value_counts().index:
-            # count how often each class appears per attribute
-            classes_frequency = train_data[(train_data[attribute] == v)].Class.value_counts()
-             
-            # find the most frequent class
+            classes_frequency = train_data[
+                (train_data[attribute] == v)
+            ].Class.value_counts()
             most_frequent = classes_frequency.idxmax()
-            
-            # save the current rule
+
             rules[attribute] = rules.get(attribute, {})
             rules[attribute][v] = most_frequent
-            
-            # actual attribute and not most frequent class
+
             errors = train_data[
-                (train_data[attribute] == v) & 
-                ~(train_data['Class'] == most_frequent)
+                (train_data[attribute] == v) &
+                ~(train_data.Class == most_frequent)
             ]
-            
             rows = train_data[train_data[attribute] == v]
+
             error_rules += len(errors) / len(rows)
-        
+
         error_rate[attribute] = error_rules
     
-    # get attribute with low error
     best_attribute = min(error_rate)
-            
+
     return rules[best_attribute], best_attribute
- 
+
 if __name__ == '__main__':
     # carregar base de dados
     X, y = load_balance()
@@ -78,4 +74,4 @@ if __name__ == '__main__':
     cm = confusion_matrix(y_test, y_pred)
     acc = accuracy_score(y_test, y_pred)
     print(cm)
-    print(acc)    
+    print(acc)
