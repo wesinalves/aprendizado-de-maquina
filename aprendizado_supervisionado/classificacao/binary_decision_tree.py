@@ -16,6 +16,7 @@ by Wesin Alves
 
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import confusion_matrix, accuracy_score
 import numpy as np
 from collections import Counter
 
@@ -138,7 +139,7 @@ class DecisionTree:
 
 
 if __name__ == "__main__":
-    data = datasets.load_breast_cancer()
+    data = datasets.load_iris()
     X, y = data.data, data.target
 
     X_train, X_test, y_train, y_test = train_test_split(
@@ -149,6 +150,7 @@ if __name__ == "__main__":
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
 
-    acc = np.sum(y_test == y_pred) / len(y_test)
-
+    cm = confusion_matrix(y_test, y_pred)
+    acc = accuracy_score(y_test, y_pred)
+    print(cm)
     print(acc)
