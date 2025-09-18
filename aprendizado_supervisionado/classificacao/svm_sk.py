@@ -3,13 +3,17 @@ import matplotlib.pyplot as plt
 from sklearn.inspection import DecisionBoundaryDisplay
 from sklearn.svm import SVC
 from sklearn.metrics import confusion_matrix, accuracy_score
+from sklearn.model_selection import train_test_split
+
 
 
 cancer = load_breast_cancer()
 X = cancer.data[:, :2]
 y = cancer.target
+print(X.shape)
 
-svm = SVC(kernel="rbf", C=2, gamma=3) # soft margin
+
+svm = SVC(kernel="rbf", C=2) # soft margin
 svm.fit(X, y)
 y_pred = svm.predict(X)
 
